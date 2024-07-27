@@ -1,7 +1,7 @@
 import RoomList from "./RoomList";
 
 const getRooms = async ()=> {
-  const res = await fetch(`http://127.0.0.1:1337/api/rooms?populate=*`, {
+  const res = await fetch(`https://bookysoft-backend.onrender.com/api/rooms?populate=*`, {
     next: {
       revalidate: 0,
     },

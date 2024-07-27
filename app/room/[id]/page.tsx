@@ -5,7 +5,7 @@ import { TbArrowsMaximize, TbUsers } from "react-icons/tb";
 
 const getRoomData = async ({params} : {params: any})=> {
   const res = await fetch(
-    `http://127.0.0.1:1337/api/rooms/${params.id}?populate=*`, 
+    `https://bookysoft-backend.onrender.com/api/rooms/${params.id}?populate=*`, 
     {
       next: {
         revalidate: 0,
@@ -17,7 +17,7 @@ const getRoomData = async ({params} : {params: any})=> {
 
 const getReservationData = async ()=> {
   const res = await fetch(
-    `http://127.0.0.1:1337/api/reservations?populate=*`, 
+    `https://bookysoft-backend.onrender.com/api/reservations?populate=*`, 
     {
       next: {
         revalidate: 0,
@@ -34,7 +34,7 @@ const RoomDetails = async ({params} : {params: any}) => {
   const isUserAuthenticated = await isAuthenticated();
   const userData = await getUser();
 
-  const imgURL = `http://127.0.0.1:1337${room.data.attributes.image.data.attributes.url}`;
+  const imgURL = `https://bookysoft-backend.onrender.com${room.data.attributes.image.data.attributes.url}`;
   
   return (
     <section className="min-h-[80vh]">
