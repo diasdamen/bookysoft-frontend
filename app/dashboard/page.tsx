@@ -28,6 +28,7 @@ interface User {
   email: string;
 }
 
+
 // Import necessary modules
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -35,32 +36,47 @@ import { format } from "date-fns";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import CancelReservation from "@/components/CancelReservation";
 
-// Define the fetch function to get user reservations
+
 const getUserReservations = async (userEmail: string): Promise<UserReservations> => {
-  const res = await fetch(
-    `https://bookysoft-backend.onrender.com/api/reservations?[filters][email][$eq]=${userEmail}&populate=*`,
-    {
-      next: {
-        revalidate: 0
-      },
+  try {
+    const res = await fetch(
+      `https://bookysoft-backend.onrender.com/api/reservations?[filters][email][$eq]=${userEmail}&populate=*`,
+      {
+        next: {
+          revalidate: 0
+        },
+      }
+    );
+
+    if (!res.ok) {
+      console.error(`Failed to fetch reservations: ${res.statusText}`);
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-  );
-  return await res.json();
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching reservations:', error);
+    throw error;
+  }
 };
 
-// Dashboard component
 const Dashboard = async () => {
-  // Get the user session
   const { getUser } = getKindeServerSession();
   const user = await getUser() as User;
-  
+
   let userReservations: UserReservations = { data: [] };
-  if (user?.email) {
-    userReservations = await getUserReservations(user.email);
+  try {
+    if (user?.email) {
+      userReservations = await getUserReservations(user.email);
+    }
+  } catch (error) {
+    console.error('Error loading reservations:', error);
   }
 
-  console.log(userReservations);
-  
+  // Check if userReservations.data is an array and has length
+  const hasReservations = Array.isArray(userReservations.data) && userReservations.data.length > 0;
+
   return (
     <section className="min-h-[80vh]">
       <div className="container mx-auto py-8 h-full">
@@ -68,10 +84,10 @@ const Dashboard = async () => {
           My bookings
         </h3>
         <div className="flex flex-col gap-8 h-full">
-          {userReservations.data.length < 1 ? (
+          {!hasReservations ? (
             <div className="flex flex-col items-center justify-center h-[50vh]">
               <p className="text-xl text-center text-secondary/70 mb-4">
-                You dont have any reservations.
+                You don't have any reservations.
               </p>
               {/* Back to homepage button */}
               <Link href="/">
