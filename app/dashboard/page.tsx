@@ -87,7 +87,7 @@ const Dashboard = async () => {
           {!hasReservations ? (
             <div className="flex flex-col items-center justify-center h-[50vh]">
               <p className="text-xl text-center text-secondary/70 mb-4">
-                You don't have any reservations.
+                You dont have any reservations.
               </p>
               {/* Back to homepage button */}
               <Link href="/">
