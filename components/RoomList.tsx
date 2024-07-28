@@ -17,7 +17,7 @@ const RoomList = ({ rooms } : { rooms: any }) => {
       return roomType === 'all' ? rooms : roomType === room.attributes.type;
     });
     setFilteredRooms(filtered);
-  }, [roomType, rooms]);
+  }, [roomType]);
 
   return (
     <section className='py-16 min-h-[90vh]'>

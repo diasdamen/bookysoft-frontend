@@ -135,7 +135,7 @@ const Reservation = ({
       };
 
       // post booking data to the server
-      postData("https://bookysoft-backend.onrender.com/api/reservations", data);
+      postData("http://127.0.0.1:1337/api/reservations", data);
       setAlertMessage({
         message: "Your booking has been successfully confirmed! We look forward to welcoming you on your selected dates.",
         type: "success",
