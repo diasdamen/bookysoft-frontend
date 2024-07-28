@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { format } from "date-fns";
-import { GetServerSideProps } from "next";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import CancelReservation from "@/components/CancelReservation";
 
-const getUserReservations = async (userEmail: string) => {
+async function getUserReservations(userEmail: string) {
   try {
     const res = await fetch(
       `https://bookysoft-backend.onrender.com/api/reservations?[filters][email][$eq]=${userEmail}&populate=*`
@@ -19,30 +18,17 @@ const getUserReservations = async (userEmail: string) => {
     console.error("Error fetching reservations:", error);
     return { data: [] }; // Return empty data on error
   }
-};
+}
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  try {
-    const { getUser } = getKindeServerSession();
-    const user = await getUser();
-    const userReservations = user?.email ? await getUserReservations(user.email) : { data: [] };
+const Dashboard = async () => {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+  let userReservations = { data: [] };
 
-    return {
-      props: {
-        userReservations,
-      },
-    };
-  } catch (error) {
-    console.error('Error fetching data for dashboard:', error);
-    return {
-      props: {
-        userReservations: { data: [] },
-      },
-    };
+  if (user?.email) {
+    userReservations = await getUserReservations(user.email);
   }
-};
 
-const Dashboard = ({ userReservations }: any) => {
   return (
     <section className="min-h-[80vh]">
       <div className="container mx-auto py-8 h-full">
