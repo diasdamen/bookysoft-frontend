@@ -39,7 +39,7 @@ const Dashboard = async () => {
           {userReservations.data.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[50vh]">
               <p className="text-xl text-center text-secondary/70 mb-4">
-                You don't have any reservations.
+                You dont have any reservations.
               </p>
               <Link href="/">
                 <Button size="md">Go to homepage</Button>
